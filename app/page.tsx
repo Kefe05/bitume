@@ -3,7 +3,7 @@ import RecentArticles from "@/components/recent-articles"
 
 export default function Home() {
   return (
-  <main>
+  <main className="space-y-4">
     <Banner  />
     <RecentArticles />
   </main>
