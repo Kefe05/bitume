@@ -4,7 +4,11 @@
 @custom-variant dark (&:is(.dark *));
 
 .btn-primary {
-  @apply bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700;
+  @apply bg-transparent  hover:bg-sky-600 text-gray-600 hover:text-white;
+}
+
+.animate-300{
+  @apply transition-all duration-300 ease-out cursor-pointer;
 }
 
 @layer utilities {
