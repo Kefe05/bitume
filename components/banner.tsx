@@ -5,7 +5,7 @@ import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { Card, CardContent } from "./ui/card";
 import { useTopHeadlines, storeArticle, useNewsCategories, useNewsByCategory } from "./hooks/news";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 
@@ -17,8 +17,8 @@ export default function Banner() {
   const { categories, isLoading: categoriesLoading } = useNewsCategories();
 
   // Fetch news based on selected category
-  const { data: topNewsData, isLoading: topNewsLoading } = useTopHeadlines();
-  const { data: categoryNewsData, isLoading: categoryNewsLoading } = useNewsByCategory(
+  const { data: topNewsData, isLoading: topNewsLoading, error: topNewsError } = useTopHeadlines();
+  const { data: categoryNewsData, isLoading: categoryNewsLoading, error: categoryNewsError } = useNewsByCategory(
     selectedTopic,
     "us"
   );
@@ -26,6 +26,7 @@ export default function Banner() {
   // Determine which data to use
   const newsData = selectedTopic === "all" ? topNewsData : categoryNewsData;
   const isLoading = selectedTopic === "all" ? topNewsLoading : categoryNewsLoading;
+  const error = selectedTopic === "all" ? topNewsError : categoryNewsError;
 
   // Create topics array with "all" first, then categories from API
   const topics = [
@@ -72,7 +73,23 @@ export default function Banner() {
       </div>
 
       {/* Banner */}
-      {isLoading ? (
+      {error ? (
+        <Card className="h-[400px] bg-red-50 dark:bg-red-900/20">
+          <CardContent className="flex flex-col justify-center items-center space-y-4 h-full text-center">
+            <h2 className="text-2xl font-bold text-red-600 dark:text-red-400">Failed to Load News</h2>
+            <p className="text-gray-600 dark:text-gray-400 max-w-md">
+              Unable to fetch news articles. This could be due to API rate limits or network issues.
+              Please check the console for more details or try again later.
+            </p>
+            <Button
+              onClick={() => window.location.reload()}
+              className="bg-red-600 hover:bg-red-700 text-white"
+            >
+              Retry
+            </Button>
+          </CardContent>
+        </Card>
+      ) : isLoading ? (
         <Card className="h-[400px] bg-gray-200 dark:bg-gray-800 animate-pulse">
           <CardContent className="flex flex-col justify-end space-y-4 h-full">
             <div className="h-8 bg-gray-300 dark:bg-gray-700 rounded w-3/4"></div>

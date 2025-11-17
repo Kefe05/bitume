@@ -3,19 +3,26 @@
 import { useQuery } from "@tanstack/react-query";
 import { NewsApiResponse, NewsArticle, NewsSourcesResponse } from "@/types/news";
 
-const API_KEY = process.env.NEXT_PUBLIC_NEWS_API_KEY || "144c38e2155d4a7c94c1e4382d3068e7";
-const BASE_URL = "https://newsapi.org/v2";
+// Use Next.js API routes to avoid CORS issues
+const API_BASE = '/api/news';
 
 async function fetchTopHeadlines(country: string = "us"): Promise<NewsApiResponse> {
-  const response = await fetch(
-    `${BASE_URL}/top-headlines?country=${country}&apiKey=${API_KEY}`
-  );
+  const url = `${API_BASE}/top-headlines?country=${country}`;
   
-  if (!response.ok) {
-    throw new Error("Failed to fetch news");
+  try {
+    const response = await fetch(url);
+    
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      console.error("API Error:", response.status, errorData);
+      throw new Error(`Failed to fetch news: ${response.status} - ${errorData.message || 'Unknown error'}`);
+    }
+    
+    return response.json();
+  } catch (error) {
+    console.error("Fetch error:", error);
+    throw error;
   }
-  
-  return response.json();
 }
 
 export function useTopHeadlines(country: string = "us") {
@@ -28,7 +35,7 @@ export function useTopHeadlines(country: string = "us") {
 
 async function fetchNewsByCategory(category: string, country: string = "us"): Promise<NewsApiResponse> {
   const response = await fetch(
-    `${BASE_URL}/top-headlines?country=${country}&category=${category}&apiKey=${API_KEY}`
+    `${API_BASE}/top-headlines?country=${country}&category=${category}`
   );
   
   if (!response.ok) {
@@ -49,7 +56,7 @@ export function useNewsByCategory(category: string, country: string = "us") {
 
 async function searchNews(query: string, sortBy: string = "publishedAt"): Promise<NewsApiResponse> {
   const response = await fetch(
-    `${BASE_URL}/everything?q=${encodeURIComponent(query)}&sortBy=${sortBy}&apiKey=${API_KEY}`
+    `${API_BASE}/search?q=${encodeURIComponent(query)}&sortBy=${sortBy}`
   );
   
   if (!response.ok) {
@@ -69,9 +76,7 @@ export function useSearchNews(query: string, sortBy: string = "publishedAt") {
 }
 
 async function fetchNewsSources(): Promise<NewsSourcesResponse> {
-  const response = await fetch(
-    `${BASE_URL}/top-headlines/sources?apiKey=${API_KEY}`
-  );
+  const response = await fetch(`${API_BASE}/sources`);
   
   if (!response.ok) {
     throw new Error("Failed to fetch news sources");
