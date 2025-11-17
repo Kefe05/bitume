@@ -1,19 +1,31 @@
 import RelatedArticles from './components/related-articles'
 import Banner from "./components/Banner"
 import Comments from './components/Comments'
+import { PageTransition } from "@/components/animations/PageTransition";
+import { FadeInView } from "@/components/animations/FadeInView";
 
 interface PageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
-export default function page({ params }: PageProps) {
+export default async function page({ params }: PageProps) {
+  const { id } = await params;
+  
   return (
-    <main className='space-y-8'>
-      <Banner articleId={params.id} />
-      <RelatedArticles />
-      <Comments />
-    </main>
+    <PageTransition>
+      <main className='space-y-8'>
+        <FadeInView>
+          <Banner articleId={id} />
+        </FadeInView>
+        <FadeInView delay={0.2}>
+          <RelatedArticles />
+        </FadeInView>
+        <FadeInView delay={0.3}>
+          <Comments />
+        </FadeInView>
+      </main>
+    </PageTransition>
   )
 }

@@ -5,13 +5,24 @@ import Image from 'next/image'
 
 export default function CreateComment() {
   return (
-    <div className='flex w-full gap-5  space-y-2'>
-         <Image src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&q=80" alt="article image" width={50} height={20} className="h-12 bg-contain rounded-full" />
-        <div className='w-[70%] space-y-3 flex flex-col'>
-            <Textarea  className='w-full bg-gray-200 h-24'/>
-            <Button className='self-end bg-sky-500 dark:bg-amber-500 hover:bg-sky-600  dark:hover:bg-amber-600 animate-300 text-white'>Post Comment</Button>
-        </div>
-
+    <div className='flex w-full gap-3 sm:gap-5'>
+      <div className="relative w-10 h-10 sm:w-12 sm:h-12 shrink-0">
+        <Image 
+          src="https://images.unsplash.com/photo-1697643635403-116830fe9d39?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
+          alt="User profile" 
+          fill
+          className="rounded-full object-cover"
+        />
+      </div>
+      <div className='flex-1 space-y-3 flex flex-col'>
+        <Textarea 
+          placeholder="Write your comment..."
+          className='w-full bg-gray-200 dark:bg-gray-800 h-24 resize-none'
+        />
+        <Button className='self-end bg-sky-500 dark:bg-amber-500 hover:bg-sky-600 dark:hover:bg-amber-600 transition-colors text-white'>
+          Post Comment
+        </Button>
+      </div>
     </div>
   )
 }

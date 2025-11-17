@@ -5,13 +5,14 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { NewsArticle } from "@/types/news";
 import { storeArticle } from "@/components/hooks/news";
+import Link from "next/link";
 
 interface SuggestionProps {
     category?: string;
     title?: string;
     description?: string;
     imageUrl?: string | null;
-    url?: string;
+    url: string;
     article?: NewsArticle;
 }
 
@@ -43,7 +44,7 @@ export default function Suggestion({
                 <span className="text-sky-500 dark:text-amber-400 text-xs font-medium">{category}</span>
                 <h4 className="text-lg font-bold line-clamp-2">{title}</h4>
                 <p className="text-gray-600 dark:text-gray-400 text-sm line-clamp-2">{description}</p>
-                <span className="text-sky-500 dark:text-amber-400 text-sm hover:underline">Read more →</span>
+                <Link href={url}  className="text-sky-500 dark:text-amber-400 text-sm hover:underline">Read more →</Link >
             </div>
             <div className="h-24 w-[160px] bg-gray-200 dark:bg-gray-700 rounded-md relative overflow-hidden shrink-0">
                 <Image

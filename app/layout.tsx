@@ -28,7 +28,7 @@ export default function RootLayout({
 
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${playfair.className} container space-y-8  antialiased`}
+        className={`${playfair.className} space-y-8  antialiased`}
       >
         <QueryProvider>
           <ThemeProvider
@@ -38,7 +38,7 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             <Nav />
-            <div className="px-20 max-w-5xl mx-auto">
+            <div className="px-4 sm:px-6 md:px-12 lg:px-20 max-w-7xl mx-auto w-full">
               {children}
             </div>
             <Footer />

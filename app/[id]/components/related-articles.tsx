@@ -2,6 +2,7 @@
 
 import Suggestion from "./Suggestion"
 import { useTopHeadlines } from "@/components/hooks/news";
+import { FadeInView } from "@/components/animations/FadeInView";
 
 export default function RelatedArticles() {
   const { data: newsData, isLoading } = useTopHeadlines();
@@ -24,16 +25,17 @@ export default function RelatedArticles() {
           ))
         ) : (
           // Real articles - show 4 related articles
-          newsData?.articles.slice(1, 5).map((article) => (
-            <Suggestion 
-              key={article.url}
-              category={article.source.name}
-              title={article.title}
-              description={article.description || "No description available"}
-              imageUrl={article.urlToImage}
-              url={article.url}
-              article={article}
-            />
+          newsData?.articles.slice(1, 5).map((article, idx) => (
+            <FadeInView key={article.url} delay={0.1 * idx}>
+              <Suggestion 
+                category={article.source.name}
+                title={article.title}
+                description={article.description || "No description available"}
+                imageUrl={article.urlToImage}
+                url={article.url}
+                article={article}
+              />
+            </FadeInView>
           ))
         )}
       </div>

@@ -2,6 +2,7 @@
 
 import { ArticleCard } from "./ArticleCard";
 import { useTopHeadlines } from "./hooks/news";
+import { FadeInView } from "./animations/FadeInView";
 
 export default function RecentArticles() {
   const { data: newsData, isLoading, error } = useTopHeadlines();
@@ -30,20 +31,21 @@ export default function RecentArticles() {
             ))
           : // Real articles (skip first one as it's used in banner)
             newsData?.articles.slice(1, 7).map((article, idx) => (
-              <ArticleCard
-                key={article.url}
-                title={article.title}
-                date={new Date(article.publishedAt).toLocaleDateString('en-US', {
-                  year: 'numeric',
-                  month: 'short',
-                  day: 'numeric'
-                })}
-                brief={article.description || "No description available"}
-                imageUrl={article.urlToImage}
-                url={article.url}
-                source={article.source.name}
-                article={article}
-              />
+              <FadeInView key={article.url} delay={0.1 * idx}>
+                <ArticleCard
+                  title={article.title}
+                  date={new Date(article.publishedAt).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric'
+                  })}
+                  brief={article.description || "No description available"}
+                  imageUrl={article.urlToImage}
+                  url={article.url}
+                  source={article.source.name}
+                  article={article}
+                />
+              </FadeInView>
             ))}
       </div>
     </section>

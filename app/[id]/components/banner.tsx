@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link"
-import {Heart, MessageSquare, Share2, SlashIcon} from "lucide-react"
+import { Heart, MessageSquare, Share2, SlashIcon } from "lucide-react"
 import { useTopHeadlines, getStoredArticle } from "@/components/hooks/news";
 import { useState, useEffect } from "react";
 import { NewsArticle } from "@/types/news";
@@ -25,8 +25,12 @@ export default function Banner({ articleId }: BannerProps) {
   const [imageError, setImageError] = useState(false);
 
   useEffect(() => {
+    console.log("Banner - Article ID:", articleId);
+
     // First, try to get from localStorage
     const storedArticle = getStoredArticle(articleId);
+    console.log("Banner - Stored article:", storedArticle ? "Found" : "Not found");
+
     if (storedArticle) {
       setArticle(storedArticle);
       return;
@@ -35,8 +39,13 @@ export default function Banner({ articleId }: BannerProps) {
     // If not in localStorage, search through fetched articles
     if (newsData?.articles) {
       const decodedUrl = decodeURIComponent(articleId);
+      console.log("Banner - Searching for URL:", decodedUrl);
+      console.log("Banner - Available articles:", newsData.articles.length);
+
       // Loop through all articles to find matching URL
       const foundArticle = newsData.articles.find(a => a.url === decodedUrl);
+      console.log("Banner - Found article:", foundArticle ? "Yes" : "No");
+
       if (foundArticle) {
         setArticle(foundArticle);
       }
@@ -61,8 +70,8 @@ export default function Banner({ articleId }: BannerProps) {
           Article not found. Please go back to the main page and select an article.
         </div>
         <div className="text-center">
-          <Link 
-            href="/" 
+          <Link
+            href="/"
             className="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
           >
             Back to News
@@ -97,8 +106,8 @@ export default function Banner({ articleId }: BannerProps) {
         </BreadcrumbList>
       </Breadcrumb>
 
-      <h2 className="text-3xl md:text-5xl font-bold">{article.title}</h2>
-      <small className="text-gray-600 dark:text-gray-400">
+      <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold leading-tight">{article.title}</h2>
+      <small className="text-sm sm:text-base text-gray-600 dark:text-gray-400 block">
         By {article.author || "Unknown"} • Published on {new Date(article.publishedAt).toLocaleDateString('en-US', {
           year: 'numeric',
           month: 'long',
@@ -106,52 +115,52 @@ export default function Banner({ articleId }: BannerProps) {
         })}
       </small>
 
-      <div className="h-[400px] my-3 bg-gray-400 rounded-md relative overflow-hidden">
-        <Image 
-          src={imageError || !article.urlToImage ? "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&q=80" : article.urlToImage} 
-          alt={article.title} 
+      <div className="h-[250px] sm:h-[300px] md:h-[400px] my-3 bg-gray-400 rounded-md relative overflow-hidden">
+        <Image
+          src={imageError || !article.urlToImage ? "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&q=80" : article.urlToImage}
+          alt={article.title}
           fill
-          className="object-cover rounded-md" 
+          className="object-cover rounded-md"
           onError={() => setImageError(true)}
         />
       </div>
 
-      <p className="text-gray-600 dark:text-gray-400 text-lg leading-relaxed">
+      <p className="text-base sm:text-lg text-gray-600 dark:text-gray-400 leading-relaxed">
         {article.description || "No description available for this article."}
       </p>
 
       {article.content && (
         <div className="prose dark:prose-invert max-w-none">
-          <p className="text-gray-700 dark:text-gray-300">
+          <p className="text-sm sm:text-base text-gray-700 dark:text-gray-300">
             {article.content.replace(/\[\+\d+ chars\]$/, '...')}
           </p>
         </div>
       )}
 
       <div className="flex justify-center">
-        <a 
-          href={article.url} 
-          target="_blank" 
+        <a
+          href={article.url}
+          target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center px-6 py-3 bg-blue-600 hover:bg-blue-700 dark:bg-amber-600 dark:hover:bg-amber-700 text-white rounded-lg transition-colors"
+          className="inline-flex items-center px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-base bg-blue-600 hover:bg-blue-700 dark:bg-amber-600 dark:hover:bg-amber-700 text-white rounded-lg transition-colors"
         >
           Read Full Article on {article.source.name}
         </a>
       </div>
 
       <hr />
-      <div className="flex justify-center gap-10 items-center text-gray-600 dark:text-gray-400">
-        <div className="flex items-center gap-2 cursor-pointer hover:text-red-500 transition-colors">
-          <Heart />
-          <span>1.2k</span>
+      <div className="flex justify-center gap-6 sm:gap-10 items-center text-gray-600 dark:text-gray-400">
+        <div className="flex flex-col sm:flex-row items-center gap-1 sm:gap-2 cursor-pointer hover:text-red-500 transition-colors">
+          <Heart className="w-5 h-5" />
+          <span className="text-xs sm:text-base">1.2k</span>
         </div>
-        <div className="flex items-center gap-2 cursor-pointer hover:text-blue-500 transition-colors">
-          <MessageSquare />
-          <span>1.2k</span>
+        <div className="flex flex-col sm:flex-row items-center gap-1 sm:gap-2 cursor-pointer hover:text-blue-500 transition-colors">
+          <MessageSquare className="w-5 h-5" />
+          <span className="text-xs sm:text-base">1.2k</span>
         </div>
-        <div className="flex items-center gap-2 cursor-pointer hover:text-green-500 transition-colors">
-          <Share2 />
-          <span>1.2k</span>
+        <div className="flex flex-col sm:flex-row items-center gap-1 sm:gap-2 cursor-pointer hover:text-green-500 transition-colors">
+          <Share2 className="w-5 h-5" />
+          <span className="text-xs sm:text-base">1.2k</span>
         </div>
       </div>
       <hr />

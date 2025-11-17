@@ -11,6 +11,7 @@ import { useRouter } from "next/navigation";
 
 export default function Banner() {
   const [selectedTopic, setSelectedTopic] = useState("all");
+  const [searchQuery, setSearchQuery] = useState("");
   const router = useRouter();
 
   // Fetch categories from API
@@ -42,13 +43,25 @@ export default function Banner() {
   return (
     <section className="space-y-4">
       {/* Search bar */}
-      <div className="relative h-fit">
+      <form 
+        onSubmit={(e) => {
+          e.preventDefault();
+          if (searchQuery.trim()) {
+            router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+          }
+        }}
+        className="relative h-fit"
+      >
         <Input
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
           className="pl-10 focus-visible:ring-sky-300/10 focus-visible:border-sky-300 dark:focus-visible:border-amber-300 focus-visible:ring-2 shadow-none"
           placeholder="Search for topics, news..."
         />
-        <Search className="absolute top-2 left-2 text-gray-400 " size={20} />
-      </div>
+        <button type="submit" className="absolute top-2 left-2">
+          <Search className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors" size={20} />
+        </button>
+      </form>
 
 
       {/*Topics */}
@@ -74,10 +87,10 @@ export default function Banner() {
 
       {/* Banner */}
       {error ? (
-        <Card className="h-[400px] bg-red-50 dark:bg-red-900/20">
-          <CardContent className="flex flex-col justify-center items-center space-y-4 h-full text-center">
-            <h2 className="text-2xl font-bold text-red-600 dark:text-red-400">Failed to Load News</h2>
-            <p className="text-gray-600 dark:text-gray-400 max-w-md">
+        <Card className="h-[300px] sm:h-[400px] bg-red-50 dark:bg-red-900/20">
+          <CardContent className="flex flex-col justify-center items-center space-y-4 h-full text-center px-4">
+            <h2 className="text-xl sm:text-2xl font-bold text-red-600 dark:text-red-400">Failed to Load News</h2>
+            <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 max-w-md">
               Unable to fetch news articles. This could be due to API rate limits or network issues.
               Please check the console for more details or try again later.
             </p>
@@ -90,31 +103,31 @@ export default function Banner() {
           </CardContent>
         </Card>
       ) : isLoading ? (
-        <Card className="h-[400px] bg-gray-200 dark:bg-gray-800 animate-pulse">
-          <CardContent className="flex flex-col justify-end space-y-4 h-full">
-            <div className="h-8 bg-gray-300 dark:bg-gray-700 rounded w-3/4"></div>
-            <div className="h-4 bg-gray-300 dark:bg-gray-700 rounded w-full"></div>
-            <div className="h-10 bg-gray-300 dark:bg-gray-700 rounded w-32"></div>
+        <Card className="h-[300px] sm:h-[400px] bg-gray-200 dark:bg-gray-800 animate-pulse">
+          <CardContent className="flex flex-col justify-end space-y-4 h-full p-4 sm:p-6">
+            <div className="h-6 sm:h-8 bg-gray-300 dark:bg-gray-700 rounded w-3/4"></div>
+            <div className="h-3 sm:h-4 bg-gray-300 dark:bg-gray-700 rounded w-full"></div>
+            <div className="h-8 sm:h-10 bg-gray-300 dark:bg-gray-700 rounded w-24 sm:w-32"></div>
           </CardContent>
         </Card>
       ) : (
         <Card
-          className="h-[400px] bg-cover bg-center bg-no-repeat"
+          className="h-[300px] sm:h-[400px] md:h-[450px] lg:h-[500px] bg-cover bg-center bg-no-repeat p-0 m-0"
           style={{
             backgroundImage: featuredArticle?.urlToImage
               ? `url('${featuredArticle.urlToImage}')`
               : "url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&q=80')"
           }}
         >
-          <CardContent className="flex flex-col justify-end space-y-4 bg-black/40 h-full text-white">
-            <h2 className="text-4xl md:text-6xl font-bold">
+          <CardContent className="flex flex-col justify-end space-y-2 sm:space-y-4 bg-black/40 h-full text-white p-4 sm:p-6">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold leading-tight">
               {featuredArticle?.title || "Breaking: Major political Event unfolds"}
             </h2>
-            <p className="text-sm md:text-base">
+            <p className="text-xs sm:text-sm md:text-base line-clamp-2 sm:line-clamp-3">
               {featuredArticle?.description || "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Itaque qui voluptatem minus atque alias similique non culpa nulla consequuntur autem."}
             </p>
             <Button
-              className="w-fit text-lg bg-sky-600 hover:bg-sky-700 dark:bg-amber-600 dark:hover:bg-amber-700 text-white cursor-pointer"
+              className="w-fit text-sm sm:text-base lg:text-lg px-4 sm:px-6 py-2 sm:py-3 bg-sky-600 hover:bg-sky-700 dark:bg-amber-600 dark:hover:bg-amber-700 text-white cursor-pointer"
               onClick={() => {
                 if (featuredArticle) {
                   storeArticle(featuredArticle);
