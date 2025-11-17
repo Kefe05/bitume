@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
-import {  Playfair } from "next/font/google";
+import { Playfair } from "next/font/google";
 import "./globals.css";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
+import { ThemeProvider } from "@/components/theme-provider";
+import QueryProvider from "@/components/providers/query-provider";
 
 
 
@@ -23,16 +25,27 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+
+    <html lang="en" suppressHydrationWarning>
       <body
-        className={`${playfair.className} container space-y-8 bg-gray-100 antialiased`}
-      > 
-        <Nav/>
-         <div className="px-20 max-w-5xl mx-auto">
-          {children}
-         </div>
-        <Footer />
+        className={`${playfair.className} container space-y-8  antialiased`}
+      >
+        <QueryProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="dark"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <Nav />
+            <div className="px-20 max-w-5xl mx-auto">
+              {children}
+            </div>
+            <Footer />
+          </ThemeProvider>
+        </QueryProvider>
       </body>
     </html>
+
   );
 }

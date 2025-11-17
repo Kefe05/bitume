@@ -23,7 +23,7 @@ export default function Footer() {
 
 
   return (
-    <footer className="flex items-center flex-col justify-center text-gray-600">
+    <footer className="flex items-center flex-col justify-center text-gray-600 dark:text-gray-400">
       <div className="flex gap-4 items-center mx-auto">
         {footerLinks.map((link, idx) => <Link href={"#"} className="capitalize" key={idx}>{link.title}</Link>)}
       </div>
