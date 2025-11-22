@@ -1,38 +1,35 @@
 "use client";
 
-import { useSearchParams, useRouter } from "next/navigation";
-import { useSearchNews } from "@/components/hooks/news";
+import { useNewsByCategory } from "@/components/hooks/news";
 import { ArticleCard } from "@/components/ArticleCard";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { PageTransition } from "@/components/animations/PageTransition";
 import { FadeInView } from "@/components/animations/FadeInView";
+import { useRouter } from "next/navigation";
+import { use } from "react";
 
-export default function SearchPage() {
-  const searchParams = useSearchParams();
-  const query = searchParams.get("q") || "";
-  const router = useRouter()
+export default function CategoryPage({ params }: { params: Promise<{ category: string }> }) {
+  const { category } = use(params);
+  const router = useRouter();
   
-  const { data: searchResults, isLoading, error } = useSearchNews(query);
+  const { data: newsData, isLoading, error } = useNewsByCategory(category);
 
   return (
     <PageTransition>
       <main className="space-y-6 py-8">
-        {/* Back button and search query */}
+        {/* Back button and category title */}
         <FadeInView>
           <div className="space-y-4">
-           
-              <Button variant="ghost" className="gap-2 " onClick={() => router.back()}>
-                <ArrowLeft size={16} />
-                Back
-              </Button>
-            
+            <Button variant="ghost" className="gap-2" onClick={() => router.back()}>
+              <ArrowLeft size={16} />
+              Back
+            </Button>
             
             <div>
-              <h1 className="text-3xl md:text-4xl font-bold">Search Results</h1>
+              <h1 className="text-3xl md:text-4xl font-bold capitalize">{category} News</h1>
               <p className="text-gray-600 dark:text-gray-400 mt-2">
-                {query ? `Showing results for "${query}"` : "Enter a search query"}
+                Latest headlines from {category}
               </p>
             </div>
           </div>
@@ -43,10 +40,10 @@ export default function SearchPage() {
           {error ? (
             <div className="text-center py-12 space-y-4">
               <h2 className="text-xl font-bold text-red-600 dark:text-red-400">
-                Failed to Load Search Results
+                Failed to Load News
               </h2>
               <p className="text-gray-600 dark:text-gray-400">
-                Unable to fetch search results. Please try again later.
+                Unable to fetch news for this category. Please try again later.
               </p>
             </div>
           ) : isLoading ? (
@@ -60,13 +57,13 @@ export default function SearchPage() {
                 </div>
               ))}
             </div>
-          ) : searchResults?.articles && searchResults.articles.length > 0 ? (
+          ) : newsData?.articles && newsData.articles.length > 0 ? (
             <>
               <p className="text-sm text-gray-600 dark:text-gray-400">
-                Found {searchResults.totalResults} results
+                Found {newsData.totalResults} articles
               </p>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {searchResults.articles.map((article, idx) => (
+                {newsData.articles.map((article, idx) => (
                   <FadeInView key={article.url} delay={0.1 * (idx % 6)}>
                     <ArticleCard
                       title={article.title}
@@ -88,10 +85,10 @@ export default function SearchPage() {
           ) : (
             <div className="text-center py-12 space-y-4">
               <h2 className="text-xl font-bold text-gray-600 dark:text-gray-400">
-                No Results Found
+                No Articles Found
               </h2>
               <p className="text-gray-600 dark:text-gray-400">
-                Try searching with different keywords
+                No news articles found for this category at the moment.
               </p>
             </div>
           )}

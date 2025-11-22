@@ -9,6 +9,14 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
+        hostname: "www.memeorandum.com",
+      },
+      {
+        protocol: "http",
+        hostname: "www.memeorandum.com",
+      },
+      {
+        protocol: "https",
         hostname: "images.unsplash.com",
       },
       {

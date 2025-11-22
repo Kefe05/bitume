@@ -14,19 +14,24 @@ export default function Nav() {
   const router = useRouter();
   const topics = [
     {
-      name: "top stories"
+      name: "top stories",
+      path: "/"
     },
     {
-      name: "world"
+      name: "world",
+      path: "/search?q=world"
     },
     {
-      name: "politics"
+      name: "politics",
+      path: "/search?q=politics"
     },
     {
-      name: "business"
+      name: "business",
+      path: "/category/business"
     },
     {
-      name: "tech"
+      name: "tech",
+      path: "/category/technology"
     }
 
   ]
@@ -46,6 +51,7 @@ export default function Nav() {
             topics.map((topic, idx) => 
               <button
                 key={idx}
+                onClick={() => router.push(topic.path)}
                 className="capitalize text-sm font-medium dark:text-gray-200 text-gray-700 relative group whitespace-nowrap cursor-pointer"
               >
                 {topic.name}
